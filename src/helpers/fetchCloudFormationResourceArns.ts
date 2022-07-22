@@ -22,10 +22,19 @@ export const fetchCloudFormationResourceArns = async (
   }
 
   const { Account } = await stsClient.send(new GetCallerIdentityCommand({}));
+  if (Account === undefined) {
+    return [];
+  }
   const region =
     process.env.AWS_REGION ?? (await cloudFormationClient.config.region());
 
-  return resources.flatMap(resource => {
-    return getSupportedResourceArn(resource, region, Account);
-  });
+  return resources.flatMap(({ ResourceType, PhysicalResourceId }) =>
+    PhysicalResourceId !== undefined && ResourceType !== undefined
+      ? getSupportedResourceArn(
+          { ResourceType, PhysicalResourceId },
+          region,
+          Account,
+        )
+      : [],
+  );
 };

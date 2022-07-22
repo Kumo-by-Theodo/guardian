@@ -8,6 +8,7 @@ import UseIntelligentTiering from './useIntelligentTiering';
 import LimitedNumberOfLambdaVersions from './limitedNumberOfVersions';
 import NoIdenticalCode from './noIdenticalCode';
 import AsyncSpecifyFailureDestination from './asyncSpecifyFailureDestination';
+import SpecifyDlqOnSqs from './specifyDlqOnSqs';
 
 export {
   noDefaultMemory,
@@ -20,4 +21,5 @@ export {
   LimitedNumberOfLambdaVersions,
   NoIdenticalCode,
   AsyncSpecifyFailureDestination,
+  SpecifyDlqOnSqs,
 };

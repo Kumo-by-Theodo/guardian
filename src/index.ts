@@ -12,6 +12,7 @@ import {
   NoMaxTimeout,
   NoSharedIamRoles,
   UnderMaxMemory,
+  SpecifyDlqOnSqs,
   UseArm,
   UseIntelligentTiering,
 } from './rules';
@@ -50,6 +51,7 @@ export const runGuardianChecks = async ({
     LimitedNumberOfLambdaVersions,
     UnderMaxMemory,
     AsyncSpecifyFailureDestination,
+    SpecifyDlqOnSqs,
   ];
 
   let remaining = rules.length + 1;

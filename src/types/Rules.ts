@@ -10,6 +10,7 @@ export enum Rules {
   NO_IDENTICAL_CODE = 'NO_IDENTICAL_CODE',
   INTELLIGENT_TIERING = 'INTELLIGENT_TIERING',
   ASYNC_SPECIFY_FAILURE_DESTINATION = 'ASYNC_NO_FAILURE_DESTINATION',
+  SPECIFY_DLQ_ON_SQS = 'SPECIFY_DLQ_ON_SQS',
 }
 
 export const RuleDisplayNames = {
@@ -26,6 +27,7 @@ export const RuleDisplayNames = {
   [Rules.INTELLIGENT_TIERING]: 'Use Intelligent Tiering',
   [Rules.ASYNC_SPECIFY_FAILURE_DESTINATION]:
     'Async Lambdas: specify a failure destination',
+  [Rules.SPECIFY_DLQ_ON_SQS]: 'Specifying a DLQ on SQS',
 } as const;
 
 export const ErrorMessages = {
@@ -48,4 +50,6 @@ export const ErrorMessages = {
     'Intelligent Tiering is not enabled on this S3 bucket. See (https://github.com/Kumo-by-Theodo/guardian/blob/master/src/rules/useIntelligentTiering/useIntelligentTiering.md) for impact and how to to resolve.',
   [Rules.ASYNC_SPECIFY_FAILURE_DESTINATION]:
     'The function is asynchronous but has no failure destination set. See (https://github.com/Kumo-by-Theodo/guardian/blob/master/src/rules/asyncSpecifyFailureDestination/asyncSpecifyFailureDestination.md) for impact and how to to resolve.',
+  [Rules.SPECIFY_DLQ_ON_SQS]:
+    'The queue does not have a specified Dead Letter Queue. See (https://github.com/Kumo-by-Theodo/guardian/blob/master/src/rules/specifyDlqOnSqs/specifyDlqOnSqs.md)',
 } as const;

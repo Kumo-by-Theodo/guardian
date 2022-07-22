@@ -10,3 +10,4 @@ export * from './fetchAllLambdaInvokeEventConfigs';
 export * from './filterLambdaFromResources';
 
 export * from './getResultsByResource';
+export * from './fetchQueueAttributes';
