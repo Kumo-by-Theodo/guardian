@@ -4,10 +4,7 @@ import {
   SQSClient,
 } from '@aws-sdk/client-sqs';
 import { ARN } from '@aws-sdk/util-arn-parser';
-import { Resource } from '../types';
-import { filterSQSFromResources } from './filterLambdaFromResources';
-export const filterSQSFromResources = (resources: Resource[]): Resource[] =>
-  resources.filter(({ arn }) => arn.service === 'sqs');
+import { filterSQSFromResources } from './filterSQSFromResources';
 
 type QueueAttributes = {
   arn: ARN;
@@ -17,14 +14,11 @@ export const fetchQueueAttributesByArn = async (
   arn: ARN,
   client: SQSClient,
 ): Promise<QueueAttributes> => {
-  const queueUrl = `https://sqs.{$arn.region}.amazonaws.com/{$arn.accountId}/{$arn.resource}`;
-
   return {
     arn: arn,
-
     attributes: await client.send(
       new GetQueueAttributesCommand({
-        QueueUrl: queueUrl,
+        QueueUrl: arn.resource,
         AttributeNames: ['RedrivePolicy'],
       }),
     ),
@@ -32,15 +26,15 @@ export const fetchQueueAttributesByArn = async (
 };
 
 export const fetchAllQueuesAttributes = async (
-  resources: Resource[],
+  resourceArns: ARN[],
 ): Promise<QueueAttributes[]> => {
   const sqsClient = new SQSClient({});
 
-  const queues = filterSQSFromResources(resources);
+  const queues = filterSQSFromResources(resourceArns);
+
   const AttributesByArn = await Promise.all(
-    queues.map(({ arn }) => fetchQueueAttributesByArn(arn, sqsClient)),
+    queues.map(arn => fetchQueueAttributesByArn(arn, sqsClient)),
   );
-  console.log(AttributesByArn);
 
   return AttributesByArn;
 };
