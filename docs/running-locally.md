@@ -20,10 +20,11 @@ If you want to specify your AWS profile and region manually, then run:
 
 Here is the full list of available options:
 
-```
-  -c, --cloudformation <stackName>  manually set AWS stack name
-  -r, --aws-region <region>         manually set AWS region
-  -p, --aws-profile <profile>       aws profile name to use
-  -t, --tags <key_value...>       aws tags to filter resources
-  -s, --short       avoid displaying the detailed output by resource
-```
+| Option                                       | Effect                                                          |
+| -------------------------------------------- | --------------------------------------------------------------- |
+| -p, --aws-profile \<profile\>                | Aws profile name to use                                         |
+| -r, --aws-region \<region\>                  | Manually set AWS region                                         |
+| -c, --cloudformations \[cloudformations...\] | Filter checked account resources by cloudformation stacks names |
+| -t, --tags \<key_value...\>                  | Filter checked account resources by tags                        |
+| -s, --short                                  | Short output: only display checks results overview              |
+| --noFail                                     | Exit with success status, even if some checks failed            |

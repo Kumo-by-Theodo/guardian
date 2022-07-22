@@ -8,17 +8,19 @@ import { ARN } from '@aws-sdk/util-arn-parser';
 import { getSupportedResourceArn } from './getSupportedResourceArn';
 
 export const fetchCloudFormationResourceArns = async (
-  cloudformation: string,
+  cloudformations: string[],
 ): Promise<ARN[]> => {
   const cloudFormationClient = new CloudFormationClient({});
   const stsClient = new STSClient({});
 
   const resources: StackResourceSummary[] = [];
-  for await (const page of paginateListStackResources(
-    { client: cloudFormationClient },
-    { StackName: cloudformation },
-  )) {
-    resources.push(...(page.StackResourceSummaries ?? []));
+  for (const cloudformation of cloudformations) {
+    for await (const page of paginateListStackResources(
+      { client: cloudFormationClient },
+      { StackName: cloudformation },
+    )) {
+      resources.push(...(page.StackResourceSummaries ?? []));
+    }
   }
 
   const { Account } = await stsClient.send(new GetCallerIdentityCommand({}));

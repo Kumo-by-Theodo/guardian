@@ -1,3 +1,4 @@
+import intersectionWith from 'lodash/intersectionWith';
 import { displayProgress } from './display';
 import {
   fetchCloudFormationResourceArns,
@@ -18,27 +19,35 @@ import {
 import { ChecksResults, Options, Rule, Tag } from './types';
 
 const fetchResourceArns = async (
-  cloudformation: string | undefined,
+  cloudformations: string[] | undefined,
   tags: Tag[] | undefined,
 ) => {
-  if (tags !== undefined) {
-    return fetchTaggedResourceArns(tags);
+  const resourcesFetchedByTags = await fetchTaggedResourceArns(tags ?? []);
+
+  if (cloudformations === undefined) {
+    return resourcesFetchedByTags;
   }
 
-  if (cloudformation !== undefined) {
-    return fetchCloudFormationResourceArns(cloudformation);
-  }
+  const resourcesFetchedByStack = await fetchCloudFormationResourceArns(
+    cloudformations,
+  );
 
-  // Maybe replace with a check of all account on the specified region ?
-  throw new Error('not enough argument specified');
+  const resources = intersectionWith(
+    resourcesFetchedByStack,
+    resourcesFetchedByTags,
+    (arnA, arnB) =>
+      arnA.resource === arnB.resource && arnA.service === arnB.service,
+  );
+
+  return resources;
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const runGuardianChecks = async ({
-  cloudformation,
+  cloudformations,
   tags,
 }: Options): Promise<ChecksResults> => {
-  const resourceArns = await fetchResourceArns(cloudformation, tags);
+  const resourceArns = await fetchResourceArns(cloudformations, tags);
   const rules: Rule[] = [
     LightBundleRule,
     NoIdenticalCode,

@@ -25,7 +25,7 @@ const getLambdaResourceArn = (
     service: 'lambda',
     region,
     accountId,
-    resource,
+    resource: `function:${resource}`,
   };
 };
 

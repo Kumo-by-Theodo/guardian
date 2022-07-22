@@ -20,7 +20,7 @@ const fetchLambdaPolicyByArn = async (
 ): Promise<Policy | undefined> => {
   try {
     const commandOutput = await lambdaClient.send(
-      new GetPolicyCommand({ FunctionName: arn.resource }),
+      new GetPolicyCommand({ FunctionName: build(arn) }),
     );
     const policy = JSON.parse(commandOutput.Policy ?? '') as Policy;
 

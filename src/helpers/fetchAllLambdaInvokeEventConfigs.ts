@@ -11,7 +11,7 @@ const fetchLambdaInvokeEventConfigByArn = async (
 ): Promise<GetFunctionEventInvokeConfigCommandOutput | undefined> => {
   try {
     return await lambdaClient.send(
-      new GetFunctionEventInvokeConfigCommand({ FunctionName: arn.resource }),
+      new GetFunctionEventInvokeConfigCommand({ FunctionName: build(arn) }),
     );
   } catch (e) {
     return;

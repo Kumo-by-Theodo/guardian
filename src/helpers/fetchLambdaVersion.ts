@@ -10,7 +10,7 @@ const fetchLambdaVersionsByArn = async (
   arn: ARN,
 ): Promise<FunctionConfiguration[]> => {
   const { Versions: versions } = await lambdaClient.send(
-    new ListVersionsByFunctionCommand({ FunctionName: arn.resource }),
+    new ListVersionsByFunctionCommand({ FunctionName: build(arn) }),
   );
 
   return versions ?? [];
